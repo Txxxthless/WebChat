@@ -1,31 +1,35 @@
-import React from "react";
+import React, { useReducer, useRef } from "react";
+import axios from "axios";
 
 function InputMessage() {
+  const inputRef = useRef(0);
+  const apiEndpoint = "https://jsonplaceholder.typicode.com/users";
+
+  const sendMessageToApi = () => {
+    const message = inputRef.current.value;
+    console.log(message);
+    axios
+      .post(apiEndpoint, message)
+      .then((response) => console.log("posted", response))
+      .catch((error) => console.error(error));
+  };
+
   return (
     <div className="row" style={{ marginTop: "15px" }}>
-      <div className="col-md-11">
+      <div className="col-md-8">
         <input
           type="text"
-          className="form-control form-control-lg"
+          className="form-control chat-input-field form-control-lg"
           placeholder="Type message"
-          style={{
-            backgroundColor: "#707793",
-            color: "white",
-            border: "0px",
-          }}
+          ref={inputRef}
         ></input>
       </div>
-      <div className="col-md-1">
+      <div className="col-md-4">
         <button
-          className="btn btn-light btn-lg align-text-bottom"
-          style={{
-            width: "100%",
-            backgroundColor: "#3bba9c",
-            color: "white",
-            border: "0px",
-          }}
+          className="btn btn-light btn-lg align-text-bottom chat-send-btn"
+          onClick={() => sendMessageToApi()}
         >
-          Send
+          Send message!
         </button>
       </div>
     </div>

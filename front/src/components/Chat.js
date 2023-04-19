@@ -4,21 +4,9 @@ import InputMessage from "./InputMessage";
 
 function Chat() {
   return (
-    <div
-      className="row flex-fill fill d-flex justify-content-start"
-      style={{ backgroundColor: "#3c3f58", padding: "50px" }}
-    >
+    <div className="row flex-fill fill d-flex justify-content-start outer-card">
       <h1 style={{ color: "white" }}>Wellcome to WebChat!</h1>
-      <div
-        className="card"
-        style={{
-          borderRadius: "10px",
-          height: "contain",
-          backgroundColor: "#43455c",
-          marginLeft: "10px",
-          marginRight: "10px",
-        }}
-      >
+      <div className="card inner-card">
         <MessageList />
       </div>
       <InputMessage />
