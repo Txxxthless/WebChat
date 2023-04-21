@@ -1,36 +1,38 @@
+html,
+body {
+  background-color: #1e1e2c;
+  height: 100%;
+}
+
 .chat-input-field {
-  background-color: #707793;
   color: white;
-  border: 0px;
 }
 
 .chat-send-btn {
   width: 100%;
-  background-color: #3bba9c;
+  background-color: #bb86fc;
   color: white;
   border: 0px;
 }
 
 .chat-list-item {
   color: white;
-  background-color: #43455c;
+  background-color: #2d2d4c;
 }
 
 .chat-msg-list {
   color: white;
-  background-color: #43455c;
-  height: 10;
+  background-color: #2d2d4c;
 }
 
 .inner-card {
   border-radius: 10px;
-  height: contain;
-  background-color: #43455c;
+  background-color: #2d2d4c;
   margin-left: 10px;
   margin-right: 10px;
 }
 
 .outer-card {
-  background-color: #3c3f58;
   padding: 50px;
+  height: 100%;
 }
