@@ -3,15 +3,24 @@ import axios from "axios";
 
 function InputMessage() {
   const inputRef = useRef(0);
-  const apiEndpoint = "https://jsonplaceholder.typicode.com/users";
+  const apiEndpoint = "http://localhost:5093/api/Message/PostMessage";
 
   const sendMessageToApi = () => {
-    const message = inputRef.current.value;
-    console.log(message);
+    const messageFromInput = inputRef.current.value;
+    const message = {
+      id: 0,
+      text: messageFromInput,
+      timeOfCreation: "2023-04-19T20:54:20.0180295",
+    };
+
     axios
       .post(apiEndpoint, message)
       .then((response) => console.log("posted", response))
-      .catch((error) => console.error(error));
+      .catch(() => console.log("error"))
+      .finally(() => {
+        inputRef.current.value = "";
+        inputRef.current.focus();
+      });
   };
 
   return (

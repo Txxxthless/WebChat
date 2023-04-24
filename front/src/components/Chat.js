@@ -10,7 +10,6 @@ function Chat() {
         <MessageList />
       </div>
       <InputMessage />
-      <div style={{ height: "25.8em" }}></div>
     </div>
   );
 }
