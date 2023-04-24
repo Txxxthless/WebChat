@@ -6,6 +6,7 @@ namespace back_api.DAL
     public class ApplicationDataBaseContext : DbContext
     {
         public DbSet<Message> Messages { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public ApplicationDataBaseContext(
             DbContextOptions<ApplicationDataBaseContext> options) : base(options)
