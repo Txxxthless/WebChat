@@ -5,7 +5,7 @@ import InputMessage from "./InputMessage";
 function Chat() {
   return (
     <div className="row flex-fill fill d-flex justify-content-start outer-card">
-      <h1 style={{ color: "white" }}>Wellcome to WebChat!</h1>
+      <h1 style={{ color: " white" }}>Wellcome to WebChat!</h1>
       <div className="card inner-card">
         <MessageList />
       </div>
