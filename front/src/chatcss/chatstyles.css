@@ -5,7 +5,7 @@ body {
 }
 
 .chat-input-field {
-  color: white;
+  color: black;
 }
 
 .chat-send-btn {
@@ -35,4 +35,42 @@ body {
 .outer-card {
   padding: 50px;
   height: 100%;
+}
+
+.log-reg-card {
+  margin: 100px;
+  background-color: #2d2d4c;
+  padding: 40px;
+}
+
+.white-text {
+  color: white;
+}
+
+.log-reg-input {
+  color: black;
+  width: 50%;
+}
+
+.log-reg-btn {
+  width: 50%;
+  background-color: #bb86fc;
+  color: white;
+  border: 0px;
+  margin-top: 20px;
+}
+
+.chat-nav {
+  padding-left: 40px;
+  background-color: #2d2d4c !important;
+}
+
+.chat-nav > * {
+  background-color: #2d2d4c;
+  font-size: 200%;
+  color: white;
+}
+
+nav .navbar-nav li a {
+  color: white !important;
 }
