@@ -6,6 +6,8 @@ function MessageList() {
   const apiEndpoint = "http://localhost:5093/api/Message/GetMessages";
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     axios
       .get(apiEndpoint)
       .then((result) => {
@@ -21,20 +23,15 @@ function MessageList() {
         <ul className="list-group list-group-flush chat-msg-list">
           {messages.map((message) => (
             <li className="list-group-item chat-list-item" key={message.id}>
+              <strong style={{ color: "#fa911c" }}>
+                {message.sender + " "}
+              </strong>
               <small style={{ color: "#fa911c" }}>
                 {message.timeOfCreation}
               </small>
               <h5>{message.text}</h5>
             </li>
           ))}
-          <li className="list-group-item chat-list-item">
-            <small style={{ color: "#fa911c" }}>2021-12-12</small>
-            <h5>Hi!</h5>
-          </li>
-          <li className="list-group-item chat-list-item">
-            <small style={{ color: "#fa911c" }}>2021-12-12</small>
-            <h5>Hi!</h5>
-          </li>
         </ul>
       </div>
     </div>
