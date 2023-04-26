@@ -23,6 +23,9 @@ function MessageList() {
         <ul className="list-group list-group-flush chat-msg-list">
           {messages.map((message) => (
             <li className="list-group-item chat-list-item" key={message.id}>
+              <strong style={{ color: "#fa911c" }}>
+                {message.sender + " "}
+              </strong>
               <small style={{ color: "#fa911c" }}>
                 {message.timeOfCreation}
               </small>

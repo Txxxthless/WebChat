@@ -108,16 +108,7 @@ function NavBar() {
         </div>
       </nav>
       <Routes>
-        <Route
-          path="/"
-          element={
-            hasToken() ? (
-              <Chat />
-            ) : (
-              <h1 className="white-text">First log in!</h1>
-            )
-          }
-        />
+        <Route path="/" element={hasToken() ? <Chat /> : <Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>

@@ -16,8 +16,10 @@ function Login() {
     axios
       .post(apiEndpoint, loginViewModel)
       .then((response) => {
-        const token = response.data;
+        const token = response.data.token;
         localStorage.setItem("token", token);
+        const username = response.data.username;
+        localStorage.setItem("username", username);
         window.location.href = "/";
       })
       .catch((error) => console.log(error));
