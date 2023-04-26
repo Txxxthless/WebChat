@@ -5,7 +5,7 @@ namespace back_api.Service.Interfaces
 {
     public interface IUserService
     {
-        Task<DataBaseResponse<string>> Login(LoginViewModel loginViewModel);
-        Task<DataBaseResponse<string>> Register(RegisterViewModel registerViewModel);
+        Task<DataBaseResponse<Dictionary<string, string>>> Login(LoginViewModel loginViewModel);
+        Task<DataBaseResponse<Dictionary<string, string>>> Register(RegisterViewModel registerViewModel);
     }
 }

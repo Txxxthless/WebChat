@@ -17,9 +17,9 @@ namespace back_api.Service.Services
             _userRepository = userRepository;
             _configuration = configuration;
         }
-        public async Task<DataBaseResponse<string>> Login(LoginViewModel loginViewModel)
+        public async Task<DataBaseResponse<Dictionary<string, string>>> Login(LoginViewModel loginViewModel)
         {
-            DataBaseResponse<string> response = new DataBaseResponse<string>();
+            DataBaseResponse<Dictionary<string, string>> response = new DataBaseResponse<Dictionary<string, string>>();
             try
             {
                 User user = await _userRepository.GetAll().FirstOrDefaultAsync(
@@ -42,8 +42,12 @@ namespace back_api.Service.Services
 
                 string token = AuthHelper.CreateToken(claims, _configuration);
 
+                Dictionary<string, string> responseData = new Dictionary<string, string>();
+                responseData.Add("token", token);
+                responseData.Add("username", loginViewModel.Name);
+
                 response.StatusCode = 200;
-                response.Data = token;
+                response.Data = responseData;
                 return response;
             }
             catch (Exception ex)
@@ -53,9 +57,9 @@ namespace back_api.Service.Services
                 return response;
             }
         }
-        public async Task<DataBaseResponse<string>> Register(RegisterViewModel registerViewModel)
+        public async Task<DataBaseResponse<Dictionary<string, string>>> Register(RegisterViewModel registerViewModel)
         {
-            DataBaseResponse<string> response = new DataBaseResponse<string>();
+            DataBaseResponse<Dictionary<string, string>> response = new DataBaseResponse<Dictionary<string, string>>();
             try
             {
                 User user = await _userRepository.GetAll().FirstOrDefaultAsync(
@@ -79,8 +83,13 @@ namespace back_api.Service.Services
 
                 string token = AuthHelper.CreateToken(claims, _configuration);
 
+                Dictionary<string, string> responseData = new Dictionary<string, string>();
+
+                responseData.Add("token", token);
+                responseData.Add("username", registerViewModel.Name);
+
                 response.StatusCode = 200;
-                response.Data = token;
+                response.Data = responseData;
                 return response;
             }
             catch (Exception ex)
