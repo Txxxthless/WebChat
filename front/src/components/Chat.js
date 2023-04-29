@@ -4,8 +4,12 @@ import InputMessage from "./InputMessage";
 
 function Chat() {
   useEffect(() => {
-    console.log(localStorage.getItem("token"));
-    console.log(localStorage.getItem("username"));
+    if (
+      localStorage.getItem("token") === "NO_TOKEN" ||
+      !localStorage.getItem("token")
+    ) {
+      window.location.href("/login");
+    }
   }, []);
   return (
     <div className="row flex-fill fill d-flex justify-content-start outer-card">
