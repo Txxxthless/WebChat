@@ -18,10 +18,6 @@ namespace back_api.Service.Services
             DataBaseResponse<Message> response = new DataBaseResponse<Message>();
             try
             {
-                if (message == null)
-                {
-                    throw new NullReferenceException("Null message");
-                }
                 message.TimeOfCreation = DateTime.Now;
                 await _messageRepository.CreateAsync(message);
                 response.StatusCode = 200;

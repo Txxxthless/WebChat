@@ -2,8 +2,10 @@
 using back_api.Service.Interfaces;
 using back_api.Service.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace back_api.Controllers
 {
@@ -31,14 +33,37 @@ namespace back_api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostMessage(Message message)
+        public async Task<IActionResult> PostMessage(MessageViewModel messageViewModel)
         {
-            DataBaseResponse<Message> response = await _messageService.AddMessage(message);
-            if (response.StatusCode == 200)
+            try
             {
-                return Ok(response.Data);
+                Message message = new Message()
+                {
+                    Text = messageViewModel.Text,
+                    Sender = GetCurrentUserName()
+                };
+                DataBaseResponse<Message> response = await _messageService.AddMessage(message);
+                if (response.StatusCode == 200)
+                {
+                    return Ok(response.Data);
+                }
+                return BadRequest();
             }
-            return BadRequest();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        private string GetCurrentUserName()
+        {
+            ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                IEnumerable<Claim> claims = identity.Claims;
+                return claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+            }
+            throw new Exception("User was not found");
         }
     }
 }
