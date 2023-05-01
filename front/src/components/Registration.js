@@ -52,10 +52,8 @@ function Register() {
       axios
         .post(apiEndpoint, registerViewModel)
         .then((response) => {
-          const token = response.data.token;
+          const token = response.data;
           localStorage.setItem("token", token);
-          const username = response.data.username;
-          localStorage.setItem("username", username);
           window.location.href = "/";
         })
         .catch((error) => console.log(error));

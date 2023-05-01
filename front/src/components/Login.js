@@ -38,10 +38,8 @@ function Login() {
         .post(apiEndpoint, loginViewModel)
         .then((response) => {
           if (response.status === 200) {
-            const token = response.data.token;
+            const token = response.data;
             localStorage.setItem("token", token);
-            const username = response.data.username;
-            localStorage.setItem("username", username);
             window.location.href = "/";
           }
         })

@@ -7,12 +7,8 @@ function InputMessage() {
 
   const sendMessageToApi = () => {
     const messageFromInput = inputRef.current.value;
-    const username = localStorage.getItem("username");
     const message = {
-      id: 0,
-      sender: username,
       text: messageFromInput,
-      timeOfCreation: "2023-04-19T20:54:20.0180295",
     };
 
     axios
