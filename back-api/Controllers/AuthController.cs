@@ -1,9 +1,7 @@
 ﻿using back_api.Domain.Entity;
 using back_api.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace back_api.Controllers
 {
@@ -12,7 +10,9 @@ namespace back_api.Controllers
     public class AuthController : ControllerBase
     {
         private IUserService _userService;
-        public AuthController(IUserService userService)
+
+        public AuthController(
+            IUserService userService)
         {
             _userService = userService;
         }

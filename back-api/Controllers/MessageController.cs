@@ -1,9 +1,6 @@
 ﻿using back_api.Domain.Entity;
 using back_api.Service.Interfaces;
-using back_api.Service.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

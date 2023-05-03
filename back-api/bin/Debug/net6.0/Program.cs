@@ -5,6 +5,7 @@ using back_api.Domain.Entity;
 using back_api.Service.Interfaces;
 using back_api.Service.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Runtime.CompilerServices;
@@ -33,6 +34,16 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<ApplicationDataBaseContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+                    {
+                        options.SignIn.RequireConfirmedAccount = true;
+                        options.Password.RequireNonAlphanumeric = false;
+                        options.Password.RequireUppercase = false;
+                        options.Password.RequireLowercase = false;
+                        options.Password.RequiredLength = 4;
+                    })
+                    .AddEntityFrameworkStores<ApplicationDataBaseContext>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -50,7 +61,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddScoped<IRepository<Message>, MessageRepository>();
-builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IUserService, UserService>();
 

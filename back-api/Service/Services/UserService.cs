@@ -2,6 +2,7 @@
 using back_api.Domain.Entity;
 using back_api.Domain.Helpers;
 using back_api.Service.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,11 +11,11 @@ namespace back_api.Service.Services
 {
     public class UserService : IUserService
     {
-        private IRepository<User> _userRepository;
+        private UserManager<IdentityUser> _userManager;
         private IConfiguration _configuration;
-        public UserService(IRepository<User> userRepository, IConfiguration configuration)
+        public UserService(UserManager<IdentityUser> userManager, IConfiguration configuration)
         {
-            _userRepository = userRepository;
+            _userManager = userManager;
             _configuration = configuration;
         }
         public async Task<DataBaseResponse<string>> Login(LoginViewModel loginViewModel)
@@ -22,28 +23,29 @@ namespace back_api.Service.Services
             DataBaseResponse<string> response = new DataBaseResponse<string>();
             try
             {
-                User user = await _userRepository.GetAll().FirstOrDefaultAsync(
-                    user => user.Name == loginViewModel.Name);
+                IdentityUser user = await _userManager.FindByNameAsync(loginViewModel.Name);
 
                 if (user == null)
                 {
-                    throw new Exception("User not found");
+                    throw new Exception("User does not exist");
                 }
 
-                if (user.Password != PasswordHelper.HashPassword(loginViewModel.Password))
+                bool isCorrectPassword = await _userManager.CheckPasswordAsync(
+                    user, loginViewModel.Password);
+
+                if (!isCorrectPassword)
                 {
                     throw new Exception("Incorrect password");
                 }
 
-                List<Claim> claims = new List<Claim>
+                List<Claim> claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name, user.Name)
+                    new Claim(ClaimTypes.Name, user.UserName)
                 };
 
                 string token = AuthHelper.CreateToken(claims, _configuration);
-
-                response.StatusCode = 200;
                 response.Data = token;
+                response.StatusCode = 200;
                 return response;
             }
             catch (Exception ex)
@@ -58,30 +60,35 @@ namespace back_api.Service.Services
             DataBaseResponse<string> response = new DataBaseResponse<string>();
             try
             {
-                User user = await _userRepository.GetAll().FirstOrDefaultAsync(
-                    user => user.Name == registerViewModel.Name);
+                IdentityUser user = await _userManager.FindByNameAsync(registerViewModel.Name);
 
                 if (user != null)
                 {
-                    throw new Exception("User exists");
+                    throw new Exception("User already exists");
                 }
 
-                user = new User();
-                user.Name = registerViewModel.Name;
-                user.Password = PasswordHelper.HashPassword(registerViewModel.Password);
-
-                await _userRepository.CreateAsync(user);
-
-                List<Claim> claims = new List<Claim>
+                user = new IdentityUser()
                 {
-                    new Claim(ClaimTypes.Name, user.Name)
+                    UserName = registerViewModel.Name
                 };
 
-                string token = AuthHelper.CreateToken(claims, _configuration);
+                IdentityResult creation = await _userManager.CreateAsync(user, registerViewModel.Password);
 
-                response.StatusCode = 200;
-                response.Data = token;
-                return response;
+                if (creation.Succeeded)
+                {
+                    List<Claim> claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, user.UserName)
+                };
+                    string token = AuthHelper.CreateToken(claims, _configuration);
+                    response.Data = token;
+                    response.StatusCode = 200;
+                    return response;
+                }
+                else
+                {
+                    throw new Exception("Something went wrong");
+                }
             }
             catch (Exception ex)
             {
