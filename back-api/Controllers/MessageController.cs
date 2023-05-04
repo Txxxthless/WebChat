@@ -39,7 +39,7 @@ namespace back_api.Controllers
             {
                 Sender = GetCurrentUserName(),
                 Text = messageViewModel.Text,
-                TimeOfCreation = DateTime.UtcNow
+                DateOfCreation = DateTime.UtcNow.ToString() + " UTC"
             };
 
             DataBaseResponse<Message> response = 
