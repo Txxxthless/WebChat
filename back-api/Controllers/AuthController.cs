@@ -22,7 +22,7 @@ namespace back_api.Controllers
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
          {
             DataBaseResponse<string> response = await _userService.Register(registerViewModel);
-            if (response.StatusCode == 200)
+            if (response.Succeeded)
             {
                 return Ok(response.Data);
             }
@@ -34,7 +34,7 @@ namespace back_api.Controllers
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             DataBaseResponse<string> response = await _userService.Login(loginViewModel);
-            if (response.StatusCode == 200)
+            if (response.Succeeded)
             {
                 return Ok(response.Data);
             }

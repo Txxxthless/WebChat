@@ -6,34 +6,54 @@ namespace back_api.DAL.Repositories
     public class MessageRepository : IRepository<Message>
     {
         private ApplicationDataBaseContext _dataBase;
+
         public MessageRepository(ApplicationDataBaseContext dataBase)
         {
             _dataBase = dataBase;
         }
-        public async Task<Message> CreateAsync(Message entity)
+
+        public async Task<DataBaseResponse<Message>> CreateAsync(Message entity)
         {
-            await _dataBase.AddAsync(entity);
-            await _dataBase.SaveChangesAsync();
-            return entity;
+            DataBaseResponse<Message> response = new DataBaseResponse<Message>();
+            try
+            {
+                await _dataBase.Messages.AddAsync(entity);
+                response.Succeeded = true;
+                return response;
+            }
+            catch(Exception ex)
+            {
+                response.Succeeded = false;
+                response.Description = ex.Message;
+                return response;
+            }
         }
 
-        public async Task<Message> DeleteAsync(Message entity)
+        public Task<DataBaseResponse<Message>> DeleteAsync(Message entity)
         {
-            _dataBase.Remove(entity);
-            await _dataBase.SaveChangesAsync();
-            return entity;
+            throw new NotImplementedException();
         }
 
-        public IQueryable<Message> GetAll()
+        public DataBaseResponse<IQueryable<Message>> GetAll()
         {
-            return _dataBase.Messages;
+            DataBaseResponse<IQueryable<Message>> response = new DataBaseResponse<IQueryable<Message>>();
+            try
+            {
+                response.Data = _dataBase.Messages;
+                response.Succeeded = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Succeeded = false;
+                response.Description = ex.Message;
+                return response;
+            }
         }
 
-        public async Task<Message> UpdateAsync(Message entity)
+        public Task<DataBaseResponse<Message>> UpdateAsync(Message entity)
         {
-            _dataBase.Update(entity);
-            await _dataBase.SaveChangesAsync();
-            return entity;
+            throw new NotImplementedException();
         }
     }
 }

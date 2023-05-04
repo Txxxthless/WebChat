@@ -45,13 +45,13 @@ namespace back_api.Service.Services
 
                 string token = AuthHelper.CreateToken(claims, _configuration);
                 response.Data = token;
-                response.StatusCode = 200;
+                response.Succeeded = true;
                 return response;
             }
             catch (Exception ex)
             {
                 response.Description = ex.Message;
-                response.StatusCode = 500;
+                response.Succeeded = false;
                 return response;
             }
         }
@@ -82,7 +82,7 @@ namespace back_api.Service.Services
                 };
                     string token = AuthHelper.CreateToken(claims, _configuration);
                     response.Data = token;
-                    response.StatusCode = 200;
+                    response.Succeeded = true;
                     return response;
                 }
                 else
@@ -93,7 +93,7 @@ namespace back_api.Service.Services
             catch (Exception ex)
             {
                 response.Description = ex.Message;
-                response.StatusCode = 500;
+                response.Succeeded = false;
                 return response;
             }
         }
