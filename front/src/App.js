@@ -1,15 +1,20 @@
-import "./App.css";
-import "./components/Chat";
-import Chat from "./components/Chat";
-import Register from "./components/Registration";
-import NavBar from "./components/NavBar";
+import { Routes, Route } from "react-router-dom";
+import Chat from "./components/chat/Chat";
+import Login from "./components/login/Login";
+import Register from "./components/register/Registration";
+import Layout from "./components/Layout";
 
 function App() {
   return (
-    <div className="App">
-      <NavBar />
-      <Register />
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Chat />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 

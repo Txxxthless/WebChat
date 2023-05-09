@@ -14,7 +14,9 @@ function MessageList() {
         setMessages(result.data);
         console.log(result.data);
       })
-      .catch((error) => console.error(error));
+      .catch(() => {
+        window.location.href = "/login";
+      });
   });
 
   return (
@@ -27,7 +29,7 @@ function MessageList() {
                 {message.sender + " "}
               </strong>
               <small style={{ color: "#fa911c" }}>
-                {message.timeOfCreation}
+                {message.dateOfCreation}
               </small>
               <h5>{message.text}</h5>
             </li>

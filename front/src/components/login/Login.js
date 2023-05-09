@@ -1,11 +1,13 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const apiEndpoint = "http://localhost:5093/api/Auth/Login";
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
 
@@ -40,7 +42,7 @@ function Login() {
           if (response.status === 200) {
             const token = response.data;
             localStorage.setItem("token", token);
-            window.location.href = "/";
+            navigate("/");
           }
         })
         .catch((error) => {
@@ -51,7 +53,10 @@ function Login() {
   };
 
   return (
-    <div className="card log-reg-card">
+    <form
+      onSubmit={(event) => event.preventDefault()}
+      className="card log-reg-card"
+    >
       <div className="row">
         <h1 className="text-white">Login</h1>
         <p className="chat-error-msg">{errors.login}</p>
@@ -80,7 +85,7 @@ function Login() {
           </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 

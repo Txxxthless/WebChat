@@ -1,13 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const apiEndpoint = "http://localhost:5093/api/Auth/Register";
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const validate = () => {
     const errors = {};
@@ -54,14 +55,17 @@ function Register() {
         .then((response) => {
           const token = response.data;
           localStorage.setItem("token", token);
-          window.location.href = "/";
+          navigate("/");
         })
         .catch((error) => console.log(error));
     }
   };
 
   return (
-    <div className="card log-reg-card">
+    <form
+      onSubmit={(event) => event.preventDefault()}
+      className="card log-reg-card"
+    >
       <div className="row">
         <h1 className="text-white">Registration</h1>
         <h2 className="text-white">Name</h2>
@@ -97,7 +101,7 @@ function Register() {
           </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
