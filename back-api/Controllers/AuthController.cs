@@ -1,9 +1,7 @@
 ﻿using back_api.Domain.Entity;
 using back_api.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace back_api.Controllers
 {
@@ -12,7 +10,9 @@ namespace back_api.Controllers
     public class AuthController : ControllerBase
     {
         private IUserService _userService;
-        public AuthController(IUserService userService)
+
+        public AuthController(
+            IUserService userService)
         {
             _userService = userService;
         }
@@ -21,8 +21,8 @@ namespace back_api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
          {
-            DataBaseResponse<Dictionary<string, string>> response = await _userService.Register(registerViewModel);
-            if (response.StatusCode == 200)
+            DataBaseResponse<string> response = await _userService.Register(registerViewModel);
+            if (response.Succeeded)
             {
                 return Ok(response.Data);
             }
@@ -33,19 +33,12 @@ namespace back_api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
-            DataBaseResponse<Dictionary<string, string>> response = await _userService.Login(loginViewModel);
-            if (response.StatusCode == 200)
+            DataBaseResponse<string> response = await _userService.Login(loginViewModel);
+            if (response.Succeeded)
             {
                 return Ok(response.Data);
             }
             return BadRequest();
-        }
-
-        [HttpGet]
-        [Authorize]
-        public IActionResult LoginTest()
-        {
-            return Ok();
         }
     }
 }

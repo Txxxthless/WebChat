@@ -1,9 +1,10 @@
-﻿using back_api.Domain.Entity;
+﻿using back_api.DAL.Interfaces;
+using back_api.Domain.Entity;
 using back_api.Service.Interfaces;
-using back_api.Service.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace back_api.Controllers
 {
@@ -11,34 +12,57 @@ namespace back_api.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private IMessageService _messageService;
-        public MessageController(IMessageService messageService)
+        private IUnitOfWork _unitOfWork;
+        public MessageController(IUnitOfWork unitOfWork)
         {
-            _messageService = messageService;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetMessages()
         {
-            DataBaseResponse<List<Message>> response = await _messageService.GetAllMessages();
-            if (response.StatusCode == 200)
+            DataBaseResponse<IQueryable<Message>> response = 
+                _unitOfWork.MessageRepository.GetAll();
+            if (response.Succeeded)
             {
-                return Ok(response.Data);
+                return Ok(await response.Data.ToListAsync());
             }
             return BadRequest();
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostMessage(Message message)
+        public async Task<IActionResult> PostMessage(MessageViewModel messageViewModel)
         {
-            DataBaseResponse<Message> response = await _messageService.AddMessage(message);
-            if (response.StatusCode == 200)
+            Message message = new Message()
             {
-                return Ok(response.Data);
+                Sender = GetCurrentUserName(),
+                Text = messageViewModel.Text,
+                DateOfCreation = DateTime.UtcNow.ToString() + " UTC"
+            };
+
+            DataBaseResponse<Message> response = 
+                await _unitOfWork.MessageRepository.CreateAsync(message);
+
+            if (response.Succeeded)
+            {
+                await _unitOfWork.Commit();
+                return Ok(); 
             }
+
             return BadRequest();
+        }
+
+        private string GetCurrentUserName()
+        {
+            ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                IEnumerable<Claim> claims = identity.Claims;
+                return claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+            }
+            throw new Exception("User was not found");
         }
     }
 }

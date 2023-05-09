@@ -2,7 +2,7 @@
 {
     public class DataBaseResponse<T> where T : class
     {
-        public int StatusCode { get; set; }
+        public bool Succeeded { get; set; }
         public string Description { get; set; }
         public T Data { get; set; }
     }
